@@ -1,0 +1,8 @@
+.frame {
+    height: 200px;
+    width: 200px;
+    background-color: rgba(182, 216, 127, 0.808);
+    border: 2px solid rgb(36, 31, 31);
+    cursor: 'move';
+    position: absolute;
+}
