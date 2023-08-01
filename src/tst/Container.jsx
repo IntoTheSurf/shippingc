@@ -4,14 +4,14 @@ import { useDrop } from "react-dnd";
 import { Box } from "./Box.jsx";
 import { ItemTypes } from "./ItemTypes.js";
 const styles = {
-  width: '100vh',
-  height: '100vh',
-  border: "1px solid black",
+  width: '100%',
+  height: '100%',
+  border: "1px solid black" 
 };
 export const Container = ({ hideSourceOnDrag }) => {
   const [boxes, setBoxes] = useState({
-    a: { top: 20, left: 90, title: "Drag me around" },
-    b: { top: 180, left: 20, title: "Drag me too" }
+    a: { top: 20, left: 390, title: "Drag me around" },
+    b: { top: 180, left: 350, title: "Drag me too" }
   });
   const moveBox = useCallback(
     (id, left, top) => {
