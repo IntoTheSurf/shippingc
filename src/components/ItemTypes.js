@@ -1,3 +1,4 @@
 export const ItemTypes = {
-    NODE: 'node'
+    BOX: 'box',
   }
+  

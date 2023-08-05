@@ -3,6 +3,7 @@ import { useCallback, useState } from "react";
 import { useDrop } from "react-dnd";
 import { Box } from "./Box.jsx";
 import { ItemTypes } from "./ItemTypes.js";
+import { Menu } from "./Menu.jsx";
 const styles = {
   width: '100%',
   height: '100%',
@@ -40,10 +41,11 @@ export const Container = ({ hideSourceOnDrag }) => {
   );
   return (
     <div ref={drop} style={styles}>
+      <Menu/>
       {Object.keys(boxes).map((key) => {
         const { left, top, title } = boxes[key];
-        return (
-          <Box
+        return (<>
+        <Box
             key={key}
             id={key}
             left={left}
@@ -52,6 +54,8 @@ export const Container = ({ hideSourceOnDrag }) => {
           >
             {title}
           </Box>
+        </>
+          
         );
       })}
     </div>
