@@ -7,13 +7,18 @@ import { Menu } from "./Menu.jsx";
 const styles = {
   width: '100%',
   height: '100%',
-  border: "1px solid black" 
+  border: "1px solid black"
 };
+
+const boxStyle= {
+  left:100,
+  top:"200px"
+};
+
 export const Container = ({ hideSourceOnDrag }) => {
-  const [boxes, setBoxes] = useState({
-    a: { top: 20, left: 390, title: "Drag me around" },
-    b: { top: 180, left: 350, title: "Drag me too" }
-  });
+  const [boxes, setBoxes] = useState([  {id: 1, top: 20, left: 390, title: "Drag me around" },
+  {id: 2, top: 180, left: 350, title: "Drag me too" }]
+);
   const moveBox = useCallback(
     (id, left, top) => {
       setBoxes(
@@ -26,9 +31,14 @@ export const Container = ({ hideSourceOnDrag }) => {
     },
     [boxes, setBoxes]
   );
+
+  const addNewBox = event => {
+    setBoxes(boxes.concat({id: boxes.length, top: 120, left: 390 }));
+  };
+
   const [, drop] = useDrop(
     () => ({
-      accept: ItemTypes.BOX,
+      accept: ItemTypes.NODE,
       drop(item, monitor) {
         const delta = monitor.getDifferenceFromInitialOffset();
         const left = Math.round(item.left + delta.x);
@@ -41,11 +51,11 @@ export const Container = ({ hideSourceOnDrag }) => {
   );
   return (
     <div ref={drop} style={styles}>
-      <Menu/>
+      <Menu createNode={addNewBox}/>
       {Object.keys(boxes).map((key) => {
         const { left, top, title } = boxes[key];
         return (<>
-        <Box
+          <Box
             key={key}
             id={key}
             left={left}
@@ -55,7 +65,7 @@ export const Container = ({ hideSourceOnDrag }) => {
             {title}
           </Box>
         </>
-          
+
         );
       })}
     </div>

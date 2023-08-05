@@ -5,7 +5,7 @@ import style from '../css/frame.module.css'
 export const Box = ({ id, left, top, hideSourceOnDrag, children }) => {
   const [{ isDragging }, drag] = useDrag(
     () => ({
-      type: ItemTypes.BOX,
+      type: ItemTypes.NODE,
       item: { id, left, top },
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
