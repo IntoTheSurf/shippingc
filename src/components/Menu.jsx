@@ -4,7 +4,7 @@ import { Button } from './Button'
 export const Menu = ({createNode}) => {
     return (
         <div className={style.menu}>
-            <Button onClick={createNode} text="First">
+            <Button onClick={createNode} text="Create node">
             </Button>
             <Button text="Second">
             </Button>
