@@ -13,8 +13,8 @@ const canvasStyle = {
 
 const Playground = ({ ...args }) => {
   console.log('SimpleExample update');
-  const box1 = { id: 'box1', ref: useRef(null), left: 100 };
-  const box2 = { id: 'box2', ref: useRef(null), left: 400 };
+  const box1 = { id: 'box1', ref: useRef(null) };
+  const box2 = { id: 'box2', ref: useRef(null) };
 
   return (
     <React.Fragment>
@@ -22,8 +22,8 @@ const Playground = ({ ...args }) => {
         <u>Simple Example:</u>
       </h3>
       <div style={canvasStyle} id="canvas">
-        <Box box={box1}>{box1.id}</Box>
-        <Box box={box2}>{box2.id}</Box>
+        <Box id={box1.id} ref={box1.ref} left={100} >{box1.id}</Box>
+        <Box id={box2.id} ref={box2.ref} left={500}>{box2.id}</Box>
         <Xarrow start={box1.id} end={box2.ref} {...args} />
       </div>
     </React.Fragment>
