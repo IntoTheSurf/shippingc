@@ -15,20 +15,10 @@ export const Container = ({ }) => {
   { id: 2, top: 180, left: 350, z: 1, title: "Drag me too" }]
   );
 
-  const stackNodes = (id) => {
-    const max = boxes.reduce(function (prev, current) {
-      return (prev.z > current.z) ? prev.z : current.z
-    });
 
-    const newState = boxes.map(obj => {
-      if (obj.id === id && obj.z != max) {
-        return { ...obj, z: max+1 };
-      }
-      return obj;
-    });
-
-    setBoxes(newState);
-  };
+  const maxZ = boxes.reduce(function (prev, current) {
+    return (prev.z > current.z) ? prev.z : current.z
+  });
 
   const moveBox = useCallback(
     (id, left, top) => {
@@ -78,7 +68,7 @@ export const Container = ({ }) => {
               left={left}
               top={top}
               zIndex={z}
-              onClick={() => { stackNodes(key); }}
+              maxZ={maxZ}
             >
               {title}
             </Box>
