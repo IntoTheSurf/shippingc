@@ -10,7 +10,7 @@ const styles = {
   border: "1px solid black"
 };
 
-export const Container = ({ hideSourceOnDrag }) => {
+export const Container = ({ }) => {
   const [boxes, setBoxes] = useState([{ id: 1, top: 20, left: 390, z: 0, title: "Drag me around" },
   { id: 2, top: 180, left: 350, z: 1, title: "Drag me too" }]
   );
@@ -77,7 +77,6 @@ export const Container = ({ hideSourceOnDrag }) => {
               id={key}
               left={left}
               top={top}
-              hideSourceOnDrag={hideSourceOnDrag}
               zIndex={z}
               onClick={() => { stackNodes(key); }}
             >

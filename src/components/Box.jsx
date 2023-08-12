@@ -2,7 +2,7 @@ import { useDrag } from 'react-dnd'
 import { ItemTypes } from './ItemTypes.js'
 import style from '../css/frame.module.css'
 
-export const Box = ({ ref, id, left, top, hideSourceOnDrag, zIndex, children, onClick }) => {
+export const Box = ({ id, left, top, zIndex, children, onClick }) => {
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: ItemTypes.NODE,
@@ -13,7 +13,7 @@ export const Box = ({ ref, id, left, top, hideSourceOnDrag, zIndex, children, on
     }),
     [id, left, top],
   )
-  if (isDragging && hideSourceOnDrag) {
+  if (isDragging) {
     return <div ref={drag} />
   }
   return (
