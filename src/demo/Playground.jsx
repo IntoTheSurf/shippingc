@@ -47,9 +47,9 @@ const Playground = ({ ...args }) => {
         <Box id={box1.id} ref={box1.ref} top={400} left={200}> {box1.id}</Box>
         <Box id={box2.id} ref={box2.ref} left={600}>{box2.id}</Box>
         <Box id={box3.id} ref={box2.ref} left={200}>{"Tord"}</Box>
-        <Xarrow start={box1.id} end={box2.id} {...props} {...args} />
-        <Xarrow start={box2.id} end={box1.id} {...props} {...args} />
-        <Xarrow start={box2.id} end={box3.id} {...props} {...args} />
+        <Xarrow start={box1.id} end={box2.id} {...props} />
+        <Xarrow start={box2.id} end={box1.id} {...props} />
+        <Xarrow start={box2.id} end={box3.id} {...props} />
       </div>
     </React.Fragment>
   );

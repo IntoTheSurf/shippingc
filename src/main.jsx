@@ -9,7 +9,7 @@ import Playground from './demo/Playground';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
 			<DndProvider backend={HTML5Backend}>
-					<Playground />
+					<Example />
 			</DndProvider>
   </React.StrictMode>,
 )

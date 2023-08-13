@@ -3,10 +3,12 @@ import { ItemTypes } from './ItemTypes.js'
 import style from '../css/frame.module.css'
 import { useXarrow } from 'react-xarrows';
 
-export const Box = ({ id, left, top, zIndex, children, maxZ }) => {
+export const Box = ({ index, id, left, top, zIndex, children, maxZ }) => {
+  
   const updateXarrow = useXarrow();
 
   const handleClick = (e) => {
+    
     if (!zIndex===maxZ){
       zIndex++;
     }
@@ -26,17 +28,19 @@ export const Box = ({ id, left, top, zIndex, children, maxZ }) => {
         lines.filter((line) => !(line.root === props.selected.id && line.end === props.box.id))
       );
     }
+    
   };
 
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: ItemTypes.NODE,
-      item: { id, left, top },
+      item: { index, left, top },
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
       }),
+      end: updateXarrow
     }),
-    [id, left, top],
+    [index, left, top],
   )
   if (isDragging) {
     return <div ref={drag} />
@@ -45,6 +49,7 @@ export const Box = ({ id, left, top, zIndex, children, maxZ }) => {
     <div
     className={style.frame}
       ref={drag}
+      index={index}
       id={id}
       style={{ ...style, left, top, zIndex }}
       data-testid="box"
