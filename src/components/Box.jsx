@@ -1,17 +1,18 @@
+import { useState } from "react";
 import { useDrag } from 'react-dnd'
 import { ItemTypes } from './ItemTypes.js'
 import style from '../css/frame.module.css'
 import { useXarrow } from 'react-xarrows';
 
-export const Box = ({ index, id, left, top, zIndex, children, maxZ }) => {
+export const Box = ({ index, id, left, top, z, children }) => {
   
   const updateXarrow = useXarrow();
 
+  const [zIndex, setZIndex] = useState(z);
+
   const handleClick = (e) => {
-    
-    if (!zIndex===maxZ){
-      zIndex++;
-    }
+    setZIndex(z++);
+
     e.stopPropagation(); //so only the click event on the box will fire on not on the container itself
     if (props.actionState === 'Normal') {
       props.handleSelect(e);
@@ -51,7 +52,7 @@ export const Box = ({ index, id, left, top, zIndex, children, maxZ }) => {
       ref={drag}
       index={index}
       id={id}
-      style={{ ...style, left, top, zIndex }}
+      style={{ ...style, left, top, z }}
       data-testid="box"
       onClick={handleClick}
     >

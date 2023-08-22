@@ -4,7 +4,7 @@ import { useDrop } from "react-dnd";
 import { Box } from "./Box.jsx";
 import { ItemTypes } from "./ItemTypes.js";
 import { Menu } from "./Menu.jsx";
-import Xarrow from 'react-xarrows';
+import Xarrow from './Xarrow.jsx';
 
 const styles = {
   width: '100%',
@@ -12,11 +12,11 @@ const styles = {
   border: "1px solid black"
 };
 
-const props = {
+const arrowProps = {
   // this is the important part of the example! play with the props to understand better the API options
   curveness: Number(0),
   color: "blue",
-  lineColor:"red",
+  lineColor: "red",
   strokeWidth: Number(4),
   showHead: false,
   labels: {
@@ -34,13 +34,34 @@ const props = {
 };
 
 export const Container = ({ hideSourceOnDrag }) => {
-  const [boxes, setBoxes] = useState([{ index: 1, id:"box1", top: 20, left: 390, z: 0, title: "Drag me around" },
-  { index: 2, id:"box2", top: 180, left: 350, z: 1, title: "Drag me too" }]
+  const [boxes, setBoxes] = useState([{ index: 1, id: "box1", top: 20, left: 390, z: 0, title: "Drag me around" },
+  { index: 2, id: "box2", top: 180, left: 350, z: 1, title: "Drag me too" }]
   );
 
-  const maxZ = boxes.reduce(function (prev, current) {
-    return (prev.z > current.z) ? prev.z : current.z
-  });
+  const [lines, setLines] = useState([{
+          props: { start:boxes[0].id, end:boxes[1].id },
+          menuWindowOpened: false,
+        }]);
+
+  // selected:{id:string,type:"arrow"|"box"}
+  const [selected, setSelected] = useState(null);
+  const [actionState, setActionState] = useState('Normal');
+
+  const handleSelect = (e) => {
+    if (e === null) {
+      setSelected(null);
+      setActionState('Normal');
+    } else setSelected({ id: e.target.id, type: 'box' });
+  };
+
+  const menuProps = {
+    selected,
+    handleSelect,
+    actionState,
+    setActionState,
+    lines,
+    setLines,
+  };
 
   const moveBox = useCallback(
     (index, left, top) => {
@@ -56,10 +77,7 @@ export const Container = ({ hideSourceOnDrag }) => {
   );
 
   const addNewBox = event => {
-    const max = boxes.reduce(function (prev, current) {
-      return (prev.z > current.z) ? prev.z : current.z
-    })
-    setBoxes(boxes.concat({ index: boxes.length, id:"box" + boxes.length, top: 120, left: 390, z: max + 1 }));
+    setBoxes(boxes.concat({ index: boxes.length, id: "box" + boxes.length, top: 120, left: 390 }));
   };
 
   const [, drop] = useDrop(
@@ -78,8 +96,8 @@ export const Container = ({ hideSourceOnDrag }) => {
   );
 
   return (
-    <div ref={drop} style={styles}>
-      <Menu createNode={addNewBox} />
+    <div onClick={() => handleSelect(null)} ref={drop} style={styles}>
+      <Menu createNode={addNewBox} {...menuProps} />
 
       <div style={{ isolation: "isolate" }}>
         {Object.keys(boxes).map((key) => {
@@ -93,16 +111,21 @@ export const Container = ({ hideSourceOnDrag }) => {
               left={left}
               top={top}
               hideSourceOnDrag={hideSourceOnDrag}
-              zIndex={z}
-              maxZ={maxZ}
+              z={z}
             >
               {title}
             </Box>
           );
         })}
       </div>
-
-      <Xarrow start={boxes[0].id} end={boxes[1].id} {...props}/>
+      {lines.map((line, i) => (
+        <Xarrow
+          key={line.props.root + '-' + line.props.end + i}
+          line={line}
+          selected={selected}
+          setSelected={setSelected}
+        />
+      ))}
     </div>
   );
 };
