@@ -33,7 +33,7 @@ export default ({ setSelected, selected, line: { props } }) => {
       onClick: (e) => {
         e.stopPropagation(); //so only the click event on the box will fire on not on the container itself
         setSelected({
-          id: { start: props.root, end: props.end },
+          id: { start: props.start, end: props.end },
           type: 'arrow',
         });
       },
@@ -41,7 +41,7 @@ export default ({ setSelected, selected, line: { props } }) => {
     },
   };
   let color = state.color;
-  if (selected && selected.type === 'arrow' && selected.id.root === props.root && selected.id.end === props.end)
+  if (selected && selected.type === 'arrow' && selected.id.start === props.start && selected.id.end === props.end)
     color = 'red';
   return <Xarrow {...{ ...defProps, ...props, ...state, ...arrowProps }} />;
 };

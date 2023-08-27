@@ -34,12 +34,20 @@ const arrowProps = {
 };
 
 export const Container = ({ hideSourceOnDrag }) => {
-  const [boxes, setBoxes] = useState([{ index: 1, id: "box1", top: 20, left: 390, z: 0, title: "Drag me around" },
-  { index: 2, id: "box2", top: 180, left: 350, z: 1, title: "Drag me too" }]
+  const [boxes, setBoxes] = useState([{ index: 0, id: "box0", top: 20, left: 390, z: 0, title: "Drag me around" },
+  { index: 1, id: "box1", top: 180, left: 350, z: 1, title: "Drag me too" },
+  { index: 2, id: "box2", top: 180, left: 350, z: 2, title: "Tom" },
+  { index: 3, id: "box3", top: 180, left: 350, z: 2, title: "Tord" }]
   );
 
   const [lines, setLines] = useState([{
-          props: { start:boxes[0].id, end:boxes[1].id },
+          props: { start:"box0", end:"box1" },
+          menuWindowOpened: false,
+        },{
+          props: { start:boxes[1].id, end:boxes[2].id },
+          menuWindowOpened: false,
+        },{
+          props: { start:boxes[0].id, end:boxes[3].id },
           menuWindowOpened: false,
         }]);
 
@@ -51,10 +59,24 @@ export const Container = ({ hideSourceOnDrag }) => {
     if (e === null) {
       setSelected(null);
       setActionState('Normal');
-    } else setSelected({ id: e.target.id, type: 'box' });
+    } else {
+      setSelected({ id: e.target.id });
+      console.log("Selected id is" + e.target.id);
+    }
   };
 
   const menuProps = {
+    selected,
+    handleSelect,
+    actionState,
+    setActionState,
+    lines,
+    setLines,
+  };
+
+  const boxProps = {
+    boxes,
+    setBoxes,
     selected,
     handleSelect,
     actionState,
@@ -76,7 +98,7 @@ export const Container = ({ hideSourceOnDrag }) => {
     [boxes, setBoxes]
   );
 
-  const addNewBox = event => {
+  const createNode = event => {
     setBoxes(boxes.concat({ index: boxes.length, id: "box" + boxes.length, top: 120, left: 390 }));
   };
 
@@ -97,7 +119,7 @@ export const Container = ({ hideSourceOnDrag }) => {
 
   return (
     <div onClick={() => handleSelect(null)} ref={drop} style={styles}>
-      <Menu createNode={addNewBox} {...menuProps} />
+      <Menu createNode={createNode} {...menuProps} />
 
       <div style={{ isolation: "isolate" }}>
         {Object.keys(boxes).map((key) => {
@@ -105,6 +127,7 @@ export const Container = ({ hideSourceOnDrag }) => {
           return (
 
             <Box
+              props={boxProps}
               key={key}
               index={key}
               id={id}
@@ -120,7 +143,7 @@ export const Container = ({ hideSourceOnDrag }) => {
       </div>
       {lines.map((line, i) => (
         <Xarrow
-          key={line.props.root + '-' + line.props.end + i}
+          key={line.props.start + '-' + line.props.end + i}
           line={line}
           selected={selected}
           setSelected={setSelected}

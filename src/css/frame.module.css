@@ -1,10 +1,16 @@
 .frame {
+    z-index: 0;
     height: 200px;
     width: 200px;
     top: 100px;
     left:100px;
     background-color: rgba(182, 216, 127, 0.808);
-    border: 2px solid rgb(36, 31, 31);
+    background-image: url('https://bobbyhadz.com/images/blog/react-prevent-multiple-button-clicks/thumbnail.webp');
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover;
+    border-radius: 100px;
+    border: 6px solid rgb(36, 31, 31);
     cursor: 'move';
     position: absolute;
 }
