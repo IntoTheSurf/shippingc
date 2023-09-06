@@ -4,6 +4,7 @@ import { useDrop } from "react-dnd";
 import { Box } from "./Box.jsx";
 import { ItemTypes } from "./ItemTypes.js";
 import { Menu } from "./Menu.jsx";
+import { LineMenu } from "./LineMenu.jsx";
 import Xarrow from './Xarrow.jsx';
 
 const styles = {
@@ -34,26 +35,56 @@ const arrowProps = {
 };
 
 export const Container = ({ hideSourceOnDrag }) => {
-  const [boxes, setBoxes] = useState([{ index: 0, id: "box0", top: 20, left: 390, z: 0, title: "Drag me around" },
-  { index: 1, id: "box1", top: 180, left: 350, z: 1, title: "Drag me too" },
-  { index: 2, id: "box2", top: 180, left: 350, z: 2, title: "Tom" },
-  { index: 3, id: "box3", top: 180, left: 350, z: 2, title: "Tord" }]
+  const [boxes, setBoxes] = useState([{ index: 0, id: "box0", top: 20, left: 390, z: 0},
+  { index: 1, id: "box1", top: 180, left: 350},
+  { index: 2, id: "box2", top: 180, left: 350},
+  { index: 3, id: "box3", top: 180, left: 350}]
   );
 
   const [lines, setLines] = useState([{
-          props: { start:"box0", end:"box1" },
-          menuWindowOpened: false,
-        },{
-          props: { start:boxes[1].id, end:boxes[2].id },
-          menuWindowOpened: false,
-        },{
-          props: { start:boxes[0].id, end:boxes[3].id },
-          menuWindowOpened: false,
-        }]);
+    props: { start: "box0", end: "box1" },
+    menuWindowOpened: false,
+  }, {
+    props: { start: boxes[1].id, end: boxes[2].id },
+    menuWindowOpened: false,
+  }, {
+    props: { start: boxes[0].id, end: boxes[3].id },
+    menuWindowOpened: false,
+  }]);
 
   // selected:{id:string,type:"arrow"|"box"}
   const [selected, setSelected] = useState(null);
   const [actionState, setActionState] = useState('Normal');
+  const [editMenu, setEditMenu] = useState({ type: 'None', index: null });
+
+ //Line properties 
+  const [lineCustomization, setLineCustomization] = useState([{
+    style: "solid", label: "a", color: "#d62727", width: 1
+  }, {
+    style: "solid", label: "b", color: "#d62727", width: 1
+  }, {
+    style: "solid", label: "c", color: "#296629", width: 1
+  }
+  ]);
+
+  const [boxCustomization, setBoxCustomization] = useState([{
+    label: "a", shape: "square", size: 100, url: " ", borderColor: "#cddb4b", bgColor: "#8febc0", borderWidth: 10, textColor: "#e3a909", z: 1
+  }, {
+    label: "b", shape: "circle", size: 100, url: " ", borderColor: "#7a40c2", bgColor: "#8febc0", borderWidth: 20, textColor: "#000000", z: 2
+  }, {
+    label: "c", shape: "square", size: 100, url: " ", borderColor: "#c24078", bgColor: "#8febc0", borderWidth: 30, textColor: "#000000", z: 3
+  }, {
+    label: "d", shape: "circle", size: 100, url: " ", borderColor: "#879494", bgColor: "#8febc0", borderWidth: 0, textColor: "#000000", z: 4
+  }
+  ]);
+
+  const [maxZ, setMaxZ] = useState(10);
+
+  const lineProperties = {
+    lineCustomization,
+    editMenu,
+    setEditMenu
+  }
 
   const handleSelect = (e) => {
     if (e === null) {
@@ -65,13 +96,23 @@ export const Container = ({ hideSourceOnDrag }) => {
     }
   };
 
+  const handleCanvasClick = (e) => {
+    e.stopPropagation();
+    setEditMenu({ type: 'None', index: null });
+  }
+
   const menuProps = {
     selected,
     handleSelect,
     actionState,
     setActionState,
     lines,
-    setLines,
+    setLines, 
+    editMenu,
+    boxCustomization, 
+    setBoxCustomization,
+    lineCustomization, 
+    setLineCustomization
   };
 
   const boxProps = {
@@ -83,7 +124,15 @@ export const Container = ({ hideSourceOnDrag }) => {
     setActionState,
     lines,
     setLines,
+    editMenu,
+    setEditMenu,
+    boxCustomization,
+    lineCustomization,
+    setLineCustomization,
+    maxZ,
+    setMaxZ
   };
+
 
   const moveBox = useCallback(
     (index, left, top) => {
@@ -100,6 +149,7 @@ export const Container = ({ hideSourceOnDrag }) => {
 
   const createNode = event => {
     setBoxes(boxes.concat({ index: boxes.length, id: "box" + boxes.length, top: 120, left: 390 }));
+    setBoxCustomization(boxCustomization.concat({ label: "box" + boxes.length, shape: "square", size: 100, url: " ", borderColor: "#cddb4b", bgColor: "#7a40c2", borderWidth: 0, textColor: "#000000", z: boxes.length }));
   };
 
   const [, drop] = useDrop(
@@ -110,6 +160,7 @@ export const Container = ({ hideSourceOnDrag }) => {
         const left = Math.round(item.left + delta.x);
         const top = Math.round(item.top + delta.y);
         moveBox(item.index, left, top);
+        setEditMenu({ type: 'None', index: null });
         return undefined;
       }
 
@@ -121,22 +172,22 @@ export const Container = ({ hideSourceOnDrag }) => {
     <div onClick={() => handleSelect(null)} ref={drop} style={styles}>
       <Menu createNode={createNode} {...menuProps} />
 
-      <div style={{ isolation: "isolate" }}>
-        {Object.keys(boxes).map((key) => {
-          const { left, top, z, id, title } = boxes[key];
+
+      <div style={{ isolation: "isolate" }} onClick={handleCanvasClick}>
+        {Object.keys(boxes).map((key, i) => {
+          const { index, left, top, z, id} = boxes[key]; 
           return (
 
             <Box
               props={boxProps}
               key={key}
-              index={key}
+              index={index}
               id={id}
               left={left}
               top={top}
-              hideSourceOnDrag={hideSourceOnDrag}
-              z={z}
+              hideSourceOnDrag={hideSourceOnDrag} 
             >
-              {title}
+             <p  >{boxCustomization[index].label}</p>
             </Box>
           );
         })}
@@ -145,8 +196,10 @@ export const Container = ({ hideSourceOnDrag }) => {
         <Xarrow
           key={line.props.start + '-' + line.props.end + i}
           line={line}
+          index={i}
           selected={selected}
           setSelected={setSelected}
+          lineProps={lineProperties}
         />
       ))}
     </div>

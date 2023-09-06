@@ -2,14 +2,21 @@ import React, { useState } from 'react';
 import Xarrow from 'react-xarrows';
 
 //{props: {line, setSelected, selected}}
-export default ({ setSelected, selected, line: { props } }) => {
+export default ({setSelected, selected, index, line: { props }, lineProps }) => {
   // console.log(sss)
+  const selectedLine = lineProps.lineCustomization[index];
+  const labelText = selectedLine.label;
+  const lineStyle = selectedLine.style;
+  const lineColor = selectedLine.color;
+  const lineWidth = selectedLine.width;
+
+
   const arrowProps = {
     // this is the important part of the example! play with the props to understand better the API options
     curveness: Number(0),
-    color: "blue",
-    lineColor: "red",
-    strokeWidth: Number(4),
+    lineColor: lineColor,
+    dashness: lineStyle != "solid",
+    strokeWidth: Number(lineWidth)+2,
     showHead: false,
     labels: {
       middle: (
@@ -19,7 +26,7 @@ export default ({ setSelected, selected, line: { props } }) => {
             fontStyle: 'bold',
             textShadow: '2px 0px 0px white',
           }}>
-          middle
+          {labelText}
         </div>
       ),
     },
@@ -36,6 +43,8 @@ export default ({ setSelected, selected, line: { props } }) => {
           id: { start: props.start, end: props.end },
           type: 'arrow',
         });
+        lineProps.setEditMenu({type:'line', index: index});
+        console.log(lineProps.editMenu);
       },
       cursor: 'pointer',
     },

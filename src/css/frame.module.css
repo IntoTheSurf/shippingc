@@ -10,7 +10,9 @@
     background-repeat: no-repeat; /* Do not repeat the image */
     background-size: cover;
     border-radius: 100px;
-    border: 6px solid rgb(36, 31, 31);
-    cursor: 'move';
+    border: 6px solid #cddb4b;
     position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
