@@ -1,0 +1,23 @@
+ul {
+    list-style-type: none;
+    padding: 0;
+    background-color: rgb(41, 40, 40);
+    color: rgb(224, 224, 224); 
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-size: 0.9em;
+    line-height: 1.1;
+    position: absolute;
+    top:0;
+    width: 100%; 
+    z-index: 1;
+}
+
+li {
+    display: inline-block;
+
+}
+
+li form {
+    display: block;
+    padding: 10px;
+}
