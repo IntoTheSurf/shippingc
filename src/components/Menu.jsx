@@ -3,7 +3,7 @@ import { BoxEditMenu } from './BoxEditMenu'
 import { Button } from './Button'
 import { LineMenu } from './LineMenu'
 
-export const Menu = ({createNode, ...props }) => {
+export const Menu = ({ createNode, ...props }) => {
 
     const removeLine = () => {
         console.log(props.selected.id.start);
@@ -23,11 +23,13 @@ export const Menu = ({createNode, ...props }) => {
                     <Button onClick={() => props.setActionState('Create line')} text="Create line">
                     </Button>
                     <Button onClick={removeLine} text="Remove line">
-                    </Button> 
+                    </Button>
                     <Button onClick={() => props.setActionState('Remove node')} text="Remove node">
                     </Button>
+                    <Button onClick={props.handleDownloadImage}>Download as Image
+                    </Button>
                 </div>
-                <BoxEditMenu boxCustomization = {props.boxCustomization} setBoxCustomization = {props.setBoxCustomization} index = {props.editMenu.index}></BoxEditMenu>
+                <BoxEditMenu boxCustomization={props.boxCustomization} setBoxCustomization={props.setBoxCustomization} index={props.editMenu.index}></BoxEditMenu>
             </>
         )
     else if (props.editMenu.type === 'line') {
@@ -39,11 +41,13 @@ export const Menu = ({createNode, ...props }) => {
                     <Button onClick={() => props.setActionState('Create line')} text="Create line">
                     </Button>
                     <Button onClick={removeLine} text="Remove line">
-                    </Button> 
+                    </Button>
                     <Button onClick={() => props.setActionState('Remove node')} text="Remove node">
                     </Button>
+                    <Button onClick={props.handleDownloadImage}>Download as Image
+                    </Button>
                 </div>
-                <LineMenu lineCustomization = {props.lineCustomization} setLineCustomization = {props.setLineCustomization} index = {props.editMenu.index}></LineMenu>
+                <LineMenu lineCustomization={props.lineCustomization} setLineCustomization={props.setLineCustomization} index={props.editMenu.index}></LineMenu>
             </>
         )
     }
@@ -56,8 +60,10 @@ export const Menu = ({createNode, ...props }) => {
                     <Button onClick={() => props.setActionState('Create line')} text="Create line">
                     </Button>
                     <Button onClick={removeLine} text="Remove line">
-                    </Button> 
+                    </Button>
                     <Button onClick={() => props.setActionState('Remove node')} text="Remove node">
+                    </Button>
+                    <Button onClick={props.handleDownloadImage}>Download as Image
                     </Button>
                 </div>
             </>

@@ -3,9 +3,12 @@ import { useCallback, useState } from "react";
 import { useDrop } from "react-dnd";
 import { Box } from "./Box.jsx";
 import { ItemTypes } from "./ItemTypes.js";
-import { Menu } from "./Menu.jsx";
-import { LineMenu } from "./LineMenu.jsx";
+import { Menu } from "./Menu.jsx"; 
 import Xarrow from './Xarrow.jsx';
+import html2canvas from 'html2canvas';
+import React from 'react'; 
+
+
 
 const styles = {
   width: '100%',
@@ -35,10 +38,12 @@ const arrowProps = {
 };
 
 export const Container = ({ hideSourceOnDrag }) => {
-  const [boxes, setBoxes] = useState([{ index: 0, id: "box0", top: 20, left: 390, z: 0},
-  { index: 1, id: "box1", top: 180, left: 350},
-  { index: 2, id: "box2", top: 180, left: 350},
-  { index: 3, id: "box3", top: 180, left: 350}]
+  const printRef = React.useRef();
+
+  const [boxes, setBoxes] = useState([{ index: 0, id: "box0", top: 20, left: 390, z: 0 },
+  { index: 1, id: "box1", top: 180, left: 350 },
+  { index: 2, id: "box2", top: 180, left: 350 },
+  { index: 3, id: "box3", top: 180, left: 350 }]
   );
 
   const [lines, setLines] = useState([{
@@ -57,7 +62,7 @@ export const Container = ({ hideSourceOnDrag }) => {
   const [actionState, setActionState] = useState('Normal');
   const [editMenu, setEditMenu] = useState({ type: 'None', index: null });
 
- //Line properties 
+  //Line properties 
   const [lineCustomization, setLineCustomization] = useState([{
     style: "solid", label: "a", color: "#d62727", width: 1
   }, {
@@ -101,18 +106,39 @@ export const Container = ({ hideSourceOnDrag }) => {
     setEditMenu({ type: 'None', index: null });
   }
 
+
+  const handleDownloadImage = async () => {
+    const element = printRef.current;
+    const canvas = await html2canvas(element);
+
+    const data = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+
+    if (typeof link.download === 'string') {
+      link.href = data;
+      link.download = 'image.png';
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      window.open(data);
+    }
+  };
+
   const menuProps = {
     selected,
     handleSelect,
     actionState,
     setActionState,
     lines,
-    setLines, 
+    setLines,
     editMenu,
-    boxCustomization, 
+    boxCustomization,
     setBoxCustomization,
-    lineCustomization, 
-    setLineCustomization
+    lineCustomization,
+    setLineCustomization,
+    handleDownloadImage
   };
 
   const boxProps = {
@@ -166,16 +192,16 @@ export const Container = ({ hideSourceOnDrag }) => {
 
     }),
     [moveBox]
-  );
+  ); 
+
 
   return (
     <div onClick={() => handleSelect(null)} ref={drop} style={styles}>
-      <Menu createNode={createNode} {...menuProps} />
-
-
+      <Menu createNode={createNode} {...menuProps} /> 
+      <div>
       <div style={{ isolation: "isolate" }} onClick={handleCanvasClick}>
         {Object.keys(boxes).map((key, i) => {
-          const { index, left, top, z, id} = boxes[key]; 
+          const { index, left, top, z, id } = boxes[key];
           return (
 
             <Box
@@ -185,9 +211,9 @@ export const Container = ({ hideSourceOnDrag }) => {
               id={id}
               left={left}
               top={top}
-              hideSourceOnDrag={hideSourceOnDrag} 
+              hideSourceOnDrag={hideSourceOnDrag}
             >
-             <p  >{boxCustomization[index].label}</p>
+              <p  >{boxCustomization[index].label}</p>
             </Box>
           );
         })}
@@ -202,6 +228,7 @@ export const Container = ({ hideSourceOnDrag }) => {
           lineProps={lineProperties}
         />
       ))}
+    </div>
     </div>
   );
 };
